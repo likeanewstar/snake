@@ -3,7 +3,6 @@ const startBtn = document.querySelector('.start')
 const snakeBody = [{ x: 1, y: 1 }]
 const snakeElement = document.createElement('div')
 
-draw(gameBoard)
 function draw(gameBoard) {
   snakeBody.forEach(segment => {
     snakeElement.style.gridRowStart = segment.y
@@ -39,4 +38,6 @@ function control(e) {
 }
 
 document.addEventListener('keyup', control)
-//startBtn.addEventListener('click', draw(gameBoard))
+startBtn.addEventListener('click', function () {
+  draw(gameBoard)
+})
