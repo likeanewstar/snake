@@ -15,6 +15,8 @@ function setBoard(boardSize) {
 }
 
 function draw(gameBoard) {
+  ramdomApple()
+
   snakeBody = [{ x: 1, y: 1 }]
   snakeBody.forEach(segment => {
     snakeElement.style.gridRowStart = segment.y
@@ -22,7 +24,6 @@ function draw(gameBoard) {
     snakeElement.classList.add('snake')
     gameBoard.appendChild(snakeElement)
   })
-  ramdomApple()
 }
 
 function ramdomApple() {
@@ -42,6 +43,7 @@ function ramdomApple() {
 function gameOver() {
   alert('Game Over!')
   snakeElement.remove()
+  appleElement.remove()
 }
 
 //assign functions to keycodes
