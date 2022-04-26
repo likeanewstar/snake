@@ -1,8 +1,10 @@
 const gameBoard = document.getElementById('game-board')
-const boardSize = 20
+const boardSize = 17
 const startBtn = document.querySelector('.start')
 let snakeBody = [{ x: 1, y: 1 }]
 const snakeElement = document.createElement('div')
+let applePosition = { x: 0, y: 0 }
+const appleElement = document.createElement('div')
 
 setBoard(boardSize)
 
@@ -20,6 +22,21 @@ function draw(gameBoard) {
     snakeElement.classList.add('snake')
     gameBoard.appendChild(snakeElement)
   })
+  ramdomApple()
+}
+
+function ramdomApple() {
+  let appleIndexX = Math.floor(Math.random() * boardSize)
+  let appleIndexY = Math.floor(Math.random() * boardSize)
+
+  applePosition = { x: appleIndexX, y: appleIndexY }
+
+  appleElement.style.gridRowStart = applePosition.x
+  appleElement.style.gridColumnStart = applePosition.y
+  appleElement.classList.add('apple')
+  gameBoard.appendChild(appleElement)
+
+  console.log(applePosition)
 }
 
 function gameOver() {
