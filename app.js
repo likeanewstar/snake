@@ -1,7 +1,7 @@
 const gameBoard = document.getElementById('game-board')
 const boardSize = 20
 const startBtn = document.querySelector('.start')
-const snakeBody = [{ x: 1, y: 1 }]
+let snakeBody = [{ x: 1, y: 1 }]
 const snakeElement = document.createElement('div')
 
 setBoard(boardSize)
@@ -13,6 +13,7 @@ function setBoard(boardSize) {
 }
 
 function draw(gameBoard) {
+  snakeBody = [{ x: 1, y: 1 }]
   snakeBody.forEach(segment => {
     snakeElement.style.gridRowStart = segment.y
     snakeElement.style.gridColumnStart = segment.x
@@ -21,46 +22,47 @@ function draw(gameBoard) {
   })
 }
 
+function gameOver() {
+  alert('Game Over!')
+  snakeElement.remove()
+}
+
 //assign functions to keycodes
 function control(e) {
   if (e.keyCode === 39) {
     // right
     snakeBody.forEach(segment => {
       if (segment.x >= boardSize) {
-        alert('Game Over!')
+        gameOver()
         return false
       }
-      console.log(`${segment.x} / ${segment.y}`)
       snakeElement.style.gridColumnStart = ++segment.x
     })
   } else if (e.keyCode === 38) {
     // top
     snakeBody.forEach(segment => {
       if (segment.y <= 1) {
-        alert('Game Over!')
+        gameOver()
         return false
       }
-      console.log(`${segment.x} / ${segment.y}`)
       snakeElement.style.gridRowStart = --segment.y
     })
   } else if (e.keyCode === 37) {
     // left
     snakeBody.forEach(segment => {
       if (segment.x <= 1) {
-        alert('Game Over!')
+        gameOver()
         return false
       }
-      console.log(`${segment.x} / ${segment.y}`)
       snakeElement.style.gridColumnStart = --segment.x
     })
   } else if (e.keyCode === 40) {
     // bottom
     snakeBody.forEach(segment => {
       if (segment.y >= boardSize) {
-        alert('Game Over!')
+        gameOver()
         return false
       }
-      console.log(`${segment.x} / ${segment.y}`)
       snakeElement.style.gridRowStart = ++segment.y
     })
   }
