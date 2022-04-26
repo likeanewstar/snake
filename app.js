@@ -26,24 +26,40 @@ function control(e) {
   if (e.keyCode === 39) {
     // right
     snakeBody.forEach(segment => {
+      if (segment.x >= boardSize) {
+        alert('Game Over!')
+        return false
+      }
       console.log(`${segment.x} / ${segment.y}`)
       snakeElement.style.gridColumnStart = ++segment.x
     })
   } else if (e.keyCode === 38) {
     // top
     snakeBody.forEach(segment => {
+      if (segment.y <= 1) {
+        alert('Game Over!')
+        return false
+      }
       console.log(`${segment.x} / ${segment.y}`)
       snakeElement.style.gridRowStart = --segment.y
     })
   } else if (e.keyCode === 37) {
     // left
     snakeBody.forEach(segment => {
+      if (segment.x <= 1) {
+        alert('Game Over!')
+        return false
+      }
       console.log(`${segment.x} / ${segment.y}`)
       snakeElement.style.gridColumnStart = --segment.x
     })
   } else if (e.keyCode === 40) {
     // bottom
     snakeBody.forEach(segment => {
+      if (segment.y >= boardSize) {
+        alert('Game Over!')
+        return false
+      }
       console.log(`${segment.x} / ${segment.y}`)
       snakeElement.style.gridRowStart = ++segment.y
     })
