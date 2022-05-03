@@ -1,11 +1,12 @@
 const gameBoard = document.getElementById('game-board')
-const boardSize = 17
+const boardSize = 10
 const startBtn = document.querySelector('.start')
 let snakeBody = [{ x: 1, y: 1 }]
 const snakeElement = document.createElement('div')
 let applePosition = { x: 0, y: 0 }
 const appleElement = document.createElement('div')
 let direction = 'right'
+let timer
 
 setBoard(boardSize)
 
@@ -25,7 +26,7 @@ function draw(gameBoard) {
     snakeElement.classList.add('snake')
     gameBoard.appendChild(snakeElement)
   })
-  let interval = setInterval(timer, 500)
+  timer = setInterval(interval, 100)
 }
 
 function randomApple() {
@@ -42,25 +43,45 @@ function randomApple() {
 
 function gameOver() {
   alert('Game Over!')
-  snakeElement.remove()
-  appleElement.remove()
+  clearInterval(timer)
+  let snakes = document.querySelectorAll('.snake')
+  let apple = document.querySelector('.apple')
+  snakes.forEach(snake => snake.parentNode.removeChild(snake))
+  apple.remove()
+  direction = 'right'
 }
 
-function timer() {
+function interval() {
   let nextPos = { x: snakeBody[0].x, y: snakeBody[0].y }
 
   if (direction == 'right') {
     // right
     nextPos.x = nextPos.x + 1
+    if (nextPos.x > boardSize) {
+      gameOver()
+      return false
+    }
   } else if (direction == 'top') {
     // top
     nextPos.y = nextPos.y - 1
+    if (nextPos.y < 1) {
+      gameOver()
+      return false
+    }
   } else if (direction == 'left') {
     // left
     nextPos.x = nextPos.x - 1
+    if (nextPos.x < 1) {
+      gameOver()
+      return false
+    }
   } else if (direction == 'bottom') {
     // bottom
     nextPos.y = nextPos.y + 1
+    if (nextPos.y > boardSize) {
+      gameOver()
+      return false
+    }
   }
 
   snakeBody.unshift(nextPos)
