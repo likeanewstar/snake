@@ -5,6 +5,7 @@ let snakeBody = [{ x: 1, y: 1 }]
 const snakeElement = document.createElement('div')
 let applePosition = { x: 0, y: 0 }
 const appleElement = document.createElement('div')
+let direction = 'right'
 
 setBoard(boardSize)
 
@@ -15,7 +16,7 @@ function setBoard(boardSize) {
 }
 
 function draw(gameBoard) {
-  ramdomApple()
+  randomApple()
 
   snakeBody = [{ x: 1, y: 1 }]
   snakeBody.forEach(segment => {
@@ -24,9 +25,10 @@ function draw(gameBoard) {
     snakeElement.classList.add('snake')
     gameBoard.appendChild(snakeElement)
   })
+  let interval = setInterval(timer, 500)
 }
 
-function ramdomApple() {
+function randomApple() {
   let appleIndexX = Math.floor(Math.random() * boardSize)
   let appleIndexY = Math.floor(Math.random() * boardSize)
 
@@ -36,8 +38,6 @@ function ramdomApple() {
   appleElement.style.gridColumnStart = applePosition.y
   appleElement.classList.add('apple')
   gameBoard.appendChild(appleElement)
-
-  console.log(applePosition)
 }
 
 function gameOver() {
@@ -46,48 +46,53 @@ function gameOver() {
   appleElement.remove()
 }
 
-//assign functions to keycodes
+function timer() {
+  let nextPos = { x: snakeBody[0].x, y: snakeBody[0].y }
+
+  if (direction == 'right') {
+    // right
+    nextPos.x = nextPos.x + 1
+  } else if (direction == 'top') {
+    // top
+    nextPos.y = nextPos.y - 1
+  } else if (direction == 'left') {
+    // left
+    nextPos.x = nextPos.x - 1
+  } else if (direction == 'bottom') {
+    // bottom
+    nextPos.y = nextPos.y + 1
+  }
+
+  snakeBody.unshift(nextPos)
+  let tail = snakeBody.pop()
+
+  console.log(snakeBody)
+
+  snakeBody.forEach(segment => {
+    snakeElement.style.gridRowStart = segment.y
+    snakeElement.style.gridColumnStart = segment.x
+    snakeElement.classList.add('snake')
+    gameBoard.appendChild(snakeElement)
+  })
+}
+
 function control(e) {
   if (e.keyCode === 39) {
     // right
-    snakeBody.forEach(segment => {
-      if (segment.x >= boardSize) {
-        gameOver()
-        return false
-      }
-      snakeElement.style.gridColumnStart = ++segment.x
-    })
+    direction = 'right'
   } else if (e.keyCode === 38) {
     // top
-    snakeBody.forEach(segment => {
-      if (segment.y <= 1) {
-        gameOver()
-        return false
-      }
-      snakeElement.style.gridRowStart = --segment.y
-    })
+    direction = 'top'
   } else if (e.keyCode === 37) {
     // left
-    snakeBody.forEach(segment => {
-      if (segment.x <= 1) {
-        gameOver()
-        return false
-      }
-      snakeElement.style.gridColumnStart = --segment.x
-    })
+    direction = 'left'
   } else if (e.keyCode === 40) {
     // bottom
-    snakeBody.forEach(segment => {
-      if (segment.y >= boardSize) {
-        gameOver()
-        return false
-      }
-      snakeElement.style.gridRowStart = ++segment.y
-    })
+    direction = 'bottom'
   }
 }
 
-document.addEventListener('keyup', control)
+document.addEventListener('keydown', control)
 startBtn.addEventListener('click', function () {
   draw(gameBoard)
 })
