@@ -1,21 +1,24 @@
 const gameBoard = document.getElementById('game-board')
-const boardSize = 10
+const boardSize = 17
 const startBtn = document.querySelector('.start')
-let snakeBody = [{ x: 1, y: 1 }]
-const snakeElement = document.createElement('div')
-let applePosition = { x: 0, y: 0 }
+
+let snakeElement = document.createElement('div')
 const appleElement = document.createElement('div')
-let direction = 'right'
+
+let snakeBody = [{ x: 1, y: 1 }]
+let applePos = { x: 0, y: 0 }
+
 let timer
+let direction = 'right' // 시작 시 진행 방향
 
 setBoard(boardSize)
-
 function setBoard(boardSize) {
   boardSize = `repeat(${boardSize},1fr)`
   gameBoard.style.gridTemplateRows = boardSize
   gameBoard.style.gridTemplateColumns = boardSize
 }
 
+// 게임 시작
 function draw(gameBoard) {
   randomApple()
 
@@ -26,17 +29,24 @@ function draw(gameBoard) {
     snakeElement.classList.add('snake')
     gameBoard.appendChild(snakeElement)
   })
-  timer = setInterval(interval, 100)
+  timer = setInterval(interval, 200)
 }
 
 function randomApple() {
-  let appleIndexX = Math.floor(Math.random() * boardSize)
-  let appleIndexY = Math.floor(Math.random() * boardSize)
+  let apple = document.querySelector('.apple')
+  if (apple) apple.remove()
 
-  applePosition = { x: appleIndexX, y: appleIndexY }
+  let appleIndexX = Math.floor(Math.random() * boardSize) + 1
+  let appleIndexY = Math.floor(Math.random() * boardSize) + 1
 
-  appleElement.style.gridRowStart = applePosition.x
-  appleElement.style.gridColumnStart = applePosition.y
+  if (appleIndexX == 1 && appleIndexY == 1) {
+    randomApple()
+  }
+
+  applePos = { x: appleIndexX, y: appleIndexY }
+
+  appleElement.style.gridRowStart = applePos.y
+  appleElement.style.gridColumnStart = applePos.x
   appleElement.classList.add('apple')
   gameBoard.appendChild(appleElement)
 }
@@ -52,6 +62,11 @@ function gameOver() {
 }
 
 function interval() {
+  let snakes = document.querySelectorAll('.snake')
+  if (snakes) {
+    snakes.forEach(snake => snake.parentNode.removeChild(snake))
+  }
+
   let nextPos = { x: snakeBody[0].x, y: snakeBody[0].y }
 
   if (direction == 'right') {
@@ -87,9 +102,15 @@ function interval() {
   snakeBody.unshift(nextPos)
   let tail = snakeBody.pop()
 
-  console.log(snakeBody)
+  // 사과 먹을 경우
+  if (nextPos.x == applePos.x && nextPos.y == applePos.y) {
+    console.log('🍎')
+    snakeBody.push(tail)
+    randomApple()
+  }
 
   snakeBody.forEach(segment => {
+    snakeElement = document.createElement('div')
     snakeElement.style.gridRowStart = segment.y
     snakeElement.style.gridColumnStart = segment.x
     snakeElement.classList.add('snake')
