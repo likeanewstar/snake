@@ -77,3 +77,20 @@ a {
   background: #4cffd7;
   transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* Game Over */
+.gameover-layer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 50%;
+  left: 53%;
+  border-radius: 0.3rem;
+  transform: translate(-50%, -50%);
+}
+.gameover-layer p {
+  font-size: 1.5rem;
+  color: #fff;
+  text-shadow: rgba(255, 255, 255, 0.35) 0px 5px 15px;
+}

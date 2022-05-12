@@ -15,6 +15,8 @@ let direction = 'right' // 시작 시 진행 방향
 const yummySound = document.querySelector('.sounds.yum')
 const gameoverSound = document.querySelector('.sounds.gameover')
 
+const gameOverLayer = document.querySelector('.gameover-layer')
+
 setBoard(boardSize)
 function setBoard(boardSize) {
   boardSize = `repeat(${boardSize},1fr)`
@@ -24,6 +26,7 @@ function setBoard(boardSize) {
 
 // 게임 시작
 function draw(gameBoard) {
+  gameOverLayer.classList.add('hide')
   randomApple()
 
   snakeBody = [{ x: 1, y: 1 }]
@@ -58,7 +61,7 @@ function randomApple() {
 function gameOver() {
   gameoverSound.currentTime = 0 // media의 play 위치 reset
   gameoverSound.play()
-  alert('Game Over!')
+  gameOverLayer.classList.remove('hide')
   clearInterval(timer)
   let snakes = document.querySelectorAll('.snake')
   let apple = document.querySelector('.apple')
