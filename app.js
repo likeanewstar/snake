@@ -81,32 +81,25 @@ function interval() {
   if (direction == 'right') {
     // right
     nextPos.x = nextPos.x + 1
-    //벽에 부딪히는 조건을 if문 하나에 통합하여 선언하기
-    if (nextPos.x > boardSize) {
-      gameOver()
-      return false
-    }
   } else if (direction == 'top') {
     // top
     nextPos.y = nextPos.y - 1
-    if (nextPos.y < 1) {
-      gameOver()
-      return false
-    }
   } else if (direction == 'left') {
     // left
     nextPos.x = nextPos.x - 1
-    if (nextPos.x < 1) {
-      gameOver()
-      return false
-    }
   } else if (direction == 'bottom') {
     // bottom
     nextPos.y = nextPos.y + 1
-    if (nextPos.y > boardSize) {
-      gameOver()
-      return false
-    }
+  }
+
+  if (
+    nextPos.x > boardSize ||
+    nextPos.y < 1 ||
+    nextPos.x < 1 ||
+    nextPos.y > boardSize
+  ) {
+    gameOver()
+    return false
   }
 
   snakeBody.unshift(nextPos)
