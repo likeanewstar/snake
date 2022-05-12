@@ -2,6 +2,12 @@ const startBtn = document.querySelector('.start')
 const gameBoard = document.getElementById('game-board')
 const boardSize = 17
 
+const gameOverLayer = document.querySelector('.gameover-layer')
+
+const scoreBox = document.querySelector('.score')
+let score = 00,
+  maxScore = window.localStorage.getItem('maxScore') || undefined
+
 let snakeElement = document.createElement('div')
 let appleElement = document.createElement('div')
 
@@ -15,8 +21,7 @@ let direction = 'right' // 시작 시 진행 방향
 const yummySound = document.querySelector('.sounds.yum')
 const gameoverSound = document.querySelector('.sounds.gameover')
 
-const gameOverLayer = document.querySelector('.gameover-layer')
-
+// set board size
 setBoard(boardSize)
 function setBoard(boardSize) {
   boardSize = `repeat(${boardSize},1fr)`
@@ -24,9 +29,12 @@ function setBoard(boardSize) {
   gameBoard.style.gridTemplateColumns = boardSize
 }
 
-// 게임 시작
+// start(restart) game
 function draw(gameBoard) {
   gameOverLayer.classList.add('hide')
+
+  scoreBox.innerText = '00'
+  score = '00'
   randomApple()
 
   snakeBody = [{ x: 1, y: 1 }]
@@ -39,6 +47,7 @@ function draw(gameBoard) {
   timer = setInterval(interval, snakeSpeed)
 }
 
+// ramdom apple position
 function randomApple() {
   let apple = document.querySelector('.apple')
   if (apple) apple.remove()
@@ -58,6 +67,13 @@ function randomApple() {
   gameBoard.appendChild(appleElement)
 }
 
+// increase score
+function incrementScore() {
+  score++
+  scoreBox.innerText = score.toString().padStart(2, '0')
+}
+
+// game over
 function gameOver() {
   gameoverSound.currentTime = 0 // media의 play 위치 reset
   gameoverSound.play()
@@ -70,7 +86,9 @@ function gameOver() {
   direction = 'right'
 }
 
+// main snake function
 function interval() {
+  // 하단 forEach 함수에서 snake를 다시 그려주기 위해 기존 snake 블럭 삭제
   let snakes = document.querySelectorAll('.snake')
   if (snakes) {
     snakes.forEach(snake => snake.parentNode.removeChild(snake))
@@ -92,6 +110,7 @@ function interval() {
     nextPos.y = nextPos.y + 1
   }
 
+  // 벽에 부딪힐 경우 game over
   if (
     nextPos.x > boardSize ||
     nextPos.y < 1 ||
@@ -102,18 +121,19 @@ function interval() {
     return false
   }
 
-  snakeBody.unshift(nextPos)
-  let tail = snakeBody.pop()
+  snakeBody.unshift(nextPos) // next position에 새로운 블럭 추가
+  let tail = snakeBody.pop() // 이동한 만큼 꼬리 블럭 삭제 (사과를 먹을 경우 다시 추가하기 위해 변수에 할당)
 
-  // 사과 먹을 경우
+  // 🍎 먹을 경우
   if (nextPos.x == applePos.x && nextPos.y == applePos.y) {
-    console.log('🍎')
+    incrementScore()
     yummySound.currentTime = 0 // media의 play 위치 reset
     yummySound.play()
-    snakeBody.push(tail)
+    snakeBody.push(tail) // pop으로 삭제했던 꼬리 블럭 다시 추가
     randomApple()
   }
 
+  // snakeBody에 담긴 배열대로 전체 snake 블럭 다시 그리기
   snakeBody.forEach(segment => {
     snakeElement = document.createElement('div')
     snakeElement.style.gridRowStart = segment.y
@@ -121,8 +141,9 @@ function interval() {
     snakeElement.classList.add('snake')
     gameBoard.appendChild(snakeElement)
   })
-}
+} // end of main snake function
 
+// control direction
 function control(e) {
   if (e.keyCode === 39) {
     // right
