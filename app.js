@@ -37,7 +37,6 @@ function draw(gameBoard) {
   score = '00'
   randomApple()
 
-  snakeBody = [{ x: 1, y: 1 }]
   snakeBody.forEach(segment => {
     snakeElement.style.gridRowStart = segment.y
     snakeElement.style.gridColumnStart = segment.x
@@ -151,16 +150,16 @@ function interval() {
 function control(e) {
   if (e.keyCode === 39) {
     // right
-    direction = 'right'
+    if (direction !== 'left') direction = 'right'
   } else if (e.keyCode === 38) {
     // top
-    direction = 'top'
+    if (direction !== 'bottom') direction = 'top'
   } else if (e.keyCode === 37) {
     // left
-    direction = 'left'
+    if (direction !== 'right') direction = 'left'
   } else if (e.keyCode === 40) {
     // bottom
-    direction = 'bottom'
+    if (direction !== 'top') direction = 'bottom'
   }
 }
 
