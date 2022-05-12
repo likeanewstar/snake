@@ -1,15 +1,19 @@
+const startBtn = document.querySelector('.start')
 const gameBoard = document.getElementById('game-board')
 const boardSize = 17
-const startBtn = document.querySelector('.start')
 
 let snakeElement = document.createElement('div')
-const appleElement = document.createElement('div')
+let appleElement = document.createElement('div')
 
 let snakeBody = [{ x: 1, y: 1 }]
 let applePos = { x: 0, y: 0 }
 
 let timer
+let snakeSpeed = 200
 let direction = 'right' // 시작 시 진행 방향
+
+const yummySound = document.querySelector('.sounds.yum')
+const gameoverSound = document.querySelector('.sounds.gameover')
 
 setBoard(boardSize)
 function setBoard(boardSize) {
@@ -29,7 +33,7 @@ function draw(gameBoard) {
     snakeElement.classList.add('snake')
     gameBoard.appendChild(snakeElement)
   })
-  timer = setInterval(interval, 200)
+  timer = setInterval(interval, snakeSpeed)
 }
 
 function randomApple() {
@@ -52,6 +56,8 @@ function randomApple() {
 }
 
 function gameOver() {
+  gameoverSound.currentTime = 0 // media의 play 위치 reset
+  gameoverSound.play()
   alert('Game Over!')
   clearInterval(timer)
   let snakes = document.querySelectorAll('.snake')
@@ -72,6 +78,7 @@ function interval() {
   if (direction == 'right') {
     // right
     nextPos.x = nextPos.x + 1
+    //벽에 부딪히는 조건을 if문 하나에 통합하여 선언하기
     if (nextPos.x > boardSize) {
       gameOver()
       return false
@@ -105,6 +112,8 @@ function interval() {
   // 사과 먹을 경우
   if (nextPos.x == applePos.x && nextPos.y == applePos.y) {
     console.log('🍎')
+    yummySound.currentTime = 0 // media의 play 위치 reset
+    yummySound.play()
     snakeBody.push(tail)
     randomApple()
   }
