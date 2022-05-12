@@ -16,6 +16,11 @@ a {
   text-decoration: none;
 }
 
+html,
+body {
+  font-size: 15px;
+}
+
 .hide {
   position: absolute;
   top: -9999px !important;
@@ -117,4 +122,42 @@ a {
   font-size: 1.5rem;
   color: #fff;
   text-shadow: rgba(255, 255, 255, 0.35) 0px 5px 15px;
+}
+
+@media screen and (max-width: 768px) {
+  html,
+  body {
+    font-size: 14px;
+  }
+
+  #wrap {
+    flex-direction: column;
+  }
+
+  .game-board {
+    width: 75vmin;
+    height: 75vmin;
+  }
+
+  .start {
+    margin: 20px 0;
+    transform: rotate(0);
+  }
+
+  .score-box {
+    padding: 20px;
+  }
+
+  .score-box .score-text {
+    transform: rotate(0);
+  }
+
+  .score-box .score {
+    padding: 10px 0 0;
+  }
+
+  /* Game Over */
+  .gameover-layer p {
+    font-size: 1rem;
+  }
 }
