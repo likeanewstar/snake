@@ -15,7 +15,7 @@ let snakeBody = [{ x: 1, y: 1 }]
 let applePos = { x: 0, y: 0 }
 
 let timer
-let snakeSpeed = 200
+let snakeSpeed = 300
 let direction = 'right' // 시작 시 진행 방향
 
 const yummySound = document.querySelector('.sounds.yum')
@@ -75,6 +75,7 @@ function incrementScore() {
 
 // game over
 function gameOver() {
+  snakeSpeed = 300
   gameoverSound.currentTime = 0 // media의 play 위치 reset
   gameoverSound.play()
   gameOverLayer.classList.remove('hide')
@@ -127,6 +128,9 @@ function interval() {
   // 🍎 먹을 경우
   if (nextPos.x == applePos.x && nextPos.y == applePos.y) {
     incrementScore()
+    snakeSpeed = snakeSpeed * 0.95
+    clearInterval(timer)
+    timer = setInterval(interval, snakeSpeed)
     yummySound.currentTime = 0 // media의 play 위치 reset
     yummySound.play()
     snakeBody.push(tail) // pop으로 삭제했던 꼬리 블럭 다시 추가
