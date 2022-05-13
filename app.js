@@ -21,6 +21,8 @@ let direction = 'right' // 시작 시 진행 방향
 const yummySound = document.querySelector('.sounds.yum')
 const gameoverSound = document.querySelector('.sounds.gameover')
 
+let isGameOver = true
+
 // set board size
 setBoard(boardSize)
 function setBoard(boardSize) {
@@ -31,20 +33,23 @@ function setBoard(boardSize) {
 
 // start(restart) game
 function draw(gameBoard) {
-  gameOverLayer.classList.add('hide')
+  if (isGameOver == true) {
+    gameOverLayer.classList.add('hide')
 
-  scoreBox.innerText = '00'
-  score = '00'
-  randomApple()
+    scoreBox.innerText = '00'
+    score = '00'
+    randomApple()
 
-  snakeBody = [{ x: 1, y: 1 }]
-  snakeBody.forEach(segment => {
-    snakeElement.style.gridRowStart = segment.y
-    snakeElement.style.gridColumnStart = segment.x
-    snakeElement.classList.add('snake')
-    gameBoard.appendChild(snakeElement)
-  })
-  timer = setInterval(interval, snakeSpeed)
+    snakeBody = [{ x: 1, y: 1 }]
+    snakeBody.forEach(segment => {
+      snakeElement.style.gridRowStart = segment.y
+      snakeElement.style.gridColumnStart = segment.x
+      snakeElement.classList.add('snake')
+      gameBoard.appendChild(snakeElement)
+    })
+    timer = setInterval(interval, snakeSpeed)
+    isGameOver = false
+  }
 }
 
 // ramdom apple position
@@ -75,6 +80,7 @@ function incrementScore() {
 
 // game over
 function gameOver() {
+  isGameOver = true
   snakeSpeed = 300
   gameoverSound.currentTime = 0 // media의 play 위치 reset
   gameoverSound.play()
