@@ -37,6 +37,7 @@ function draw(gameBoard) {
   score = '00'
   randomApple()
 
+  snakeBody = [{ x: 1, y: 1 }]
   snakeBody.forEach(segment => {
     snakeElement.style.gridRowStart = segment.y
     snakeElement.style.gridColumnStart = segment.x
