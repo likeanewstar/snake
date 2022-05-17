@@ -79,21 +79,6 @@ function incrementScore() {
   scoreBox.innerText = score.toString().padStart(2, '0')
 }
 
-// game over
-function gameOver() {
-  isGameOver = true
-  snakeSpeed = 200
-  gameoverSound.currentTime = 0 // media의 play 위치 reset
-  gameoverSound.play()
-  gameOverLayer.classList.remove('hide')
-  clearInterval(timer)
-  let snakes = document.querySelectorAll('.snake')
-  let apple = document.querySelector('.apple')
-  snakes.forEach(snake => snake.parentNode.removeChild(snake))
-  apple.remove()
-  direction = 'right'
-}
-
 // main snake function
 function interval() {
   // 하단 forEach 함수에서 snake를 다시 그려주기 위해 기존 snake 블럭 삭제
@@ -127,6 +112,22 @@ function interval() {
   ) {
     gameOver()
     return false
+  }
+
+  // 몸통에 부딪힐 경우 game over
+  if (
+    snakeBody.some(segment => {
+      if (equalPositions(segment, nextPos)) {
+        return true
+      }
+    })
+  ) {
+    gameOver()
+    return false
+  }
+
+  function equalPositions(pos1, pos2) {
+    return pos1.x === pos2.x && pos1.y === pos2.y
   }
 
   snakeBody.unshift(nextPos) // next position에 새로운 블럭 추가
@@ -169,6 +170,23 @@ function control(e) {
     // bottom
     if (direction !== 'top') direction = 'bottom'
   }
+}
+
+// game over
+function gameOver() {
+  isGameOver = true
+  snakeSpeed = 200
+  gameoverSound.currentTime = 0 // media의 play 위치 reset
+  gameoverSound.play()
+  gameOverLayer.classList.remove('hide')
+  clearInterval(timer)
+  let snakes = document.querySelectorAll('.snake')
+  let apple = document.querySelector('.apple')
+  snakes.forEach(snake => snake.parentNode.removeChild(snake))
+  apple.remove()
+  direction = 'right'
+
+  console.log(snakes)
 }
 
 document.addEventListener('keydown', control)
