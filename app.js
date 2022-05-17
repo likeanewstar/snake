@@ -15,7 +15,7 @@ let snakeBody = [{ x: 1, y: 1 }]
 let applePos = { x: 0, y: 0 }
 
 let timer
-let snakeSpeed = 300
+let snakeSpeed = 200
 let direction = 'right' // 시작 시 진행 방향
 
 const yummySound = document.querySelector('.sounds.yum')
@@ -38,7 +38,7 @@ function draw(gameBoard) {
 
     scoreBox.innerText = '00'
     score = '00'
-    randomApple()
+    addNewApple()
 
     snakeBody = [{ x: 1, y: 1 }]
     snakeBody.forEach(segment => {
@@ -53,18 +53,19 @@ function draw(gameBoard) {
 }
 
 // ramdom apple position
-function randomApple() {
+function addNewApple() {
   let apple = document.querySelector('.apple')
+  let appleIndex, appleIndexX, appleIndexY
+
   if (apple) apple.remove()
 
-  let appleIndexX = Math.floor(Math.random() * boardSize) + 1
-  let appleIndexY = Math.floor(Math.random() * boardSize) + 1
-
-  if (appleIndexX == 1 && appleIndexY == 1) {
-    randomApple()
-  }
-
-  applePos = { x: appleIndexX, y: appleIndexY }
+  do {
+    appleIndexX = Math.floor(Math.random() * boardSize) + 1
+    appleIndexY = Math.floor(Math.random() * boardSize) + 1
+    applePos = { x: appleIndexX, y: appleIndexY }
+  } while (
+    snakeBody.some(snake => snake.x == appleIndexX && snake.y == appleIndexY)
+  )
 
   appleElement.style.gridRowStart = applePos.y
   appleElement.style.gridColumnStart = applePos.x
@@ -81,7 +82,7 @@ function incrementScore() {
 // game over
 function gameOver() {
   isGameOver = true
-  snakeSpeed = 300
+  snakeSpeed = 200
   gameoverSound.currentTime = 0 // media의 play 위치 reset
   gameoverSound.play()
   gameOverLayer.classList.remove('hide')
@@ -140,7 +141,7 @@ function interval() {
     yummySound.currentTime = 0 // media의 play 위치 reset
     yummySound.play()
     snakeBody.push(tail) // pop으로 삭제했던 꼬리 블럭 다시 추가
-    randomApple()
+    addNewApple()
   }
 
   // snakeBody에 담긴 배열대로 전체 snake 블럭 다시 그리기
