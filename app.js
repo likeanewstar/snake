@@ -179,7 +179,7 @@ function control(e) {
   }
 }
 
-// 모바일 터치 이벤트 제어
+// mobile control direction
 let startX = 0
 let startY = 0
 let delX = 0
