@@ -227,7 +227,6 @@ function gameOver() {
   snakes.forEach(snake => snake.parentNode.removeChild(snake))
   apple.remove()
   direction = 'right'
-  console.log(direction)
 }
 
 document.addEventListener('keydown', control)
