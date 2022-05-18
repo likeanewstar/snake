@@ -191,26 +191,21 @@ function handleMobileTouchStart(e) {
   isDrag = true
   startX = e.touches[0].clientX
   startY = e.touches[0].clientY
-  console.log('start')
 }
 function handleMobileTouchMove(e) {
   if (isDrag === false) return false
   delX = e.touches[0].clientX - startX
   delY = e.touches[0].clientY - startY
-  console.log('move')
 }
 function handleMobileTouchEnd() {
-  if (delX < -50) {
+  if (delX < -50 && direction !== 'right') {
     direction = 'left'
-  } else if (delX > 50) {
+  } else if (delX > 50 && direction !== 'left') {
     direction = 'right'
-  } else if (delY < -50) {
+  } else if (delY < -50 && direction !== 'bottom') {
     direction = 'top'
-  } else if (delY > 50) {
+  } else if (delY > 50 && direction !== 'top') {
     direction = 'bottom'
-  } else {
-    console.log('end')
-    return false
   }
   isDrag = false
 }
