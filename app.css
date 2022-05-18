@@ -88,22 +88,27 @@ body {
 }
 
 /* score */
-.score-box {
-  padding: 10px 15px;
+.score-box,
+.max-score-box {
+  padding: 40px 0;
 }
-.score-box .score-text {
-  font-size: 12px;
+.score-text {
+  font-size: 10px;
   font-weight: 800;
   color: #6e7888;
   letter-spacing: 0.05rem;
   transform: rotate(90deg);
 }
-.score-box .score {
-  padding: 22px 0 0;
-  font-size: 20px;
+.score {
+  padding: 16px 0 0;
+  font-size: 15px;
   font-weight: 800;
   color: #6e7888;
   text-align: center;
+}
+
+.max-score-box .score {
+  padding: 60px 0 0;
 }
 
 /* Game Over */
@@ -144,15 +149,21 @@ body {
     transform: rotate(0);
   }
 
-  .score-box {
-    padding: 20px;
+  .score-board {
+    display: flex;
   }
 
-  .score-box .score-text {
+  .score-box,
+  .max-score-box {
+    padding: 20px 15px;
+  }
+
+  .score-text {
     transform: rotate(0);
   }
 
-  .score-box .score {
+  .score,
+  .max-score-box .score {
     padding: 10px 0 0;
   }
 

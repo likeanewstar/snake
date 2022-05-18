@@ -4,7 +4,8 @@ const boardSize = 17
 
 const gameOverLayer = document.querySelector('.gameover-layer')
 
-const scoreBox = document.querySelector('.score')
+const scoreBox = document.querySelector('#score')
+const maxScoreBox = document.querySelector('#maxScore')
 let score = 00,
   maxScore = window.localStorage.getItem('maxScore') || undefined
 
@@ -29,6 +30,11 @@ function setBoard(boardSize) {
   boardSize = `repeat(${boardSize},1fr)`
   gameBoard.style.gridTemplateRows = boardSize
   gameBoard.style.gridTemplateColumns = boardSize
+}
+
+setMaxScore()
+function setMaxScore() {
+  maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
 }
 
 // start(restart) game
@@ -176,6 +182,10 @@ function control(e) {
 function gameOver() {
   isGameOver = true
   snakeSpeed = 200
+  maxScore ? null : (maxScore = score)
+  score > maxScore ? (maxScore = score) : null
+  window.localStorage.setItem('maxScore', maxScore)
+  maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
   gameoverSound.currentTime = 0 // media의 play 위치 reset
   gameoverSound.play()
   gameOverLayer.classList.remove('hide')
@@ -185,8 +195,6 @@ function gameOver() {
   snakes.forEach(snake => snake.parentNode.removeChild(snake))
   apple.remove()
   direction = 'right'
-
-  console.log(snakes)
 }
 
 document.addEventListener('keydown', control)
