@@ -34,7 +34,8 @@ function setBoard(boardSize) {
 
 setMaxScore()
 function setMaxScore() {
-  if (maxScoreBox) maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
+  if (maxScore != null)
+    maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
 }
 
 // start(restart) game
@@ -178,6 +179,42 @@ function control(e) {
   }
 }
 
+// 모바일 터치 이벤트 제어
+let startX = 0
+let startY = 0
+let delX = 0
+let delY = 0
+let offsetX = 0
+let isDrag = false
+
+function handleMobileTouchStart(e) {
+  isDrag = true
+  startX = e.touches[0].clientX
+  startY = e.touches[0].clientY
+  console.log('start')
+}
+function handleMobileTouchMove(e) {
+  if (isDrag === false) return false
+  delX = e.touches[0].clientX - startX
+  delY = e.touches[0].clientY - startY
+  console.log('move')
+}
+function handleMobileTouchEnd() {
+  if (delX < -50) {
+    direction = 'left'
+  } else if (delX > 50) {
+    direction = 'right'
+  } else if (delY < -50) {
+    direction = 'top'
+  } else if (delY > 50) {
+    direction = 'bottom'
+  } else {
+    console.log('end')
+    return false
+  }
+  isDrag = false
+}
+
 // game over
 function gameOver() {
   isGameOver = true
@@ -195,9 +232,13 @@ function gameOver() {
   snakes.forEach(snake => snake.parentNode.removeChild(snake))
   apple.remove()
   direction = 'right'
+  console.log(direction)
 }
 
 document.addEventListener('keydown', control)
+gameBoard.addEventListener('touchstart', handleMobileTouchStart)
+gameBoard.addEventListener('touchmove', handleMobileTouchMove)
+gameBoard.addEventListener('touchend', handleMobileTouchEnd)
 startBtn.addEventListener('click', function () {
   draw(gameBoard)
 })

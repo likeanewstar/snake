@@ -19,6 +19,7 @@ a {
 html,
 body {
   font-size: 15px;
+  overflow: hidden;
 }
 
 .hide {
@@ -133,6 +134,14 @@ body {
   html,
   body {
     font-size: 14px;
+  }
+
+  body {
+    min-height: 100vh;
+
+    @supports (-webkit-touch-callout: none) {
+      min-height: -webkit-fill-available;
+    }
   }
 
   #wrap {
