@@ -34,7 +34,7 @@ function setBoard(boardSize) {
 
 setMaxScore()
 function setMaxScore() {
-  maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
+  if (maxScoreBox) maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
 }
 
 // start(restart) game
