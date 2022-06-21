@@ -91,7 +91,7 @@ App.SnakeGame = (function () {
     // @brief 스네이크 메인 동작 함수
     //======================================================================
     onSnake: function () {
-      // 하단 forEach 함수에서 snake를 다시 그려주기 위해 기존 snake 블럭 삭제
+      // 기존 snake 블럭 삭제 (하단 forEach 함수에서 전체 snakeBody를 다시 그려줌)
       let snakes = document.querySelectorAll('.snake')
       if (snakes) {
         snakes.forEach(snake => snake.parentNode.removeChild(snake))
@@ -214,7 +214,7 @@ App.SnakeGame = (function () {
     },
 
     //======================================================================
-    // @brief 사과 위치 세팅 함수. 뱀과 기존 사과의 좌표와 겹치지 않도록 세팅하는 것이 핵심.
+    // @brief 사과 위치 세팅 함수. 뱀 & 기존 사과의 좌표와 겹치지 않도록 세팅
     //======================================================================
     initApple: function () {
       let apple = document.querySelector('.apple')
@@ -264,7 +264,6 @@ App.SnakeGame = (function () {
       let startY = 0
       let delX = 0
       let delY = 0
-      let offsetX = 0
       let isDrag = false
 
       function handleMobileTouchStart(e) {
