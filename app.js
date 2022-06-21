@@ -128,16 +128,13 @@ App.SnakeGame = (function () {
       // 몸통에 부딪힐 경우 game over
       if (
         snakeBody.some(segment => {
-          if (equalPositions(segment, nextPos)) {
+          if (self.equalPositions(segment, nextPos)) {
             return true
           }
         })
       ) {
         self.gameOver()
         return false
-      }
-      function equalPositions(pos1, pos2) {
-        return pos1.x === pos2.x && pos1.y === pos2.y
       }
 
       snakeBody.unshift(nextPos) // next position에 새로운 블럭 추가
@@ -163,6 +160,15 @@ App.SnakeGame = (function () {
         snakeElement.classList.add('snake')
         gameBoard.appendChild(snakeElement)
       })
+    },
+
+    //======================================================================
+    // @brief 좌표 체크 함수
+    // @return 인자로 받은 두 개의 좌표가 완전히 일치할 경우, true를 반환한다.
+    // @param 비교할 좌표 두 개를 객체 형태로 받는다.
+    //======================================================================
+    equalPositions: function (pos1, pos2) {
+      return pos1.x === pos2.x && pos1.y === pos2.y
     },
 
     //======================================================================
