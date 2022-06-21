@@ -42,26 +42,22 @@ App.SnakeGame = (function () {
     init: function () {
       self = this
 
-      // set board size
-      setBoard(boardSize)
-      function setBoard(boardSize) {
-        boardSize = `repeat(${boardSize},1fr)`
-        gameBoard.style.gridTemplateRows = boardSize
-        gameBoard.style.gridTemplateColumns = boardSize
-      }
-
-      // set max score
-      setMaxScore()
-      function setMaxScore() {
-        if (maxScore != null)
-          maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
-      }
-
+      self.setBoardSize(boardSize)
       self.controlDirection()
+      self.setMaxScore()
 
       startBtn.addEventListener('click', function () {
         self.drawStage(gameBoard)
       })
+    },
+
+    //======================================================================
+    // @brief 보드 사이즈 지정 함수. 상단에 선언한 변수에 담긴 값으로 보드 사이즈를 세팅한다.
+    //======================================================================
+    setBoardSize: function (boardSize) {
+      boardSize = `repeat(${boardSize},1fr)`
+      gameBoard.style.gridTemplateRows = boardSize
+      gameBoard.style.gridTemplateColumns = boardSize
     },
 
     //======================================================================
@@ -171,6 +167,14 @@ App.SnakeGame = (function () {
     incrementScore: function () {
       score++
       scoreBox.innerText = score.toString().padStart(2, '0')
+    },
+
+    //======================================================================
+    // @brief 맥스 스코어 세팅 함수
+    //======================================================================
+    setMaxScore: function () {
+      if (maxScore != null)
+        maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
     },
 
     //======================================================================
