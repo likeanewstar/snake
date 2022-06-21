@@ -52,7 +52,8 @@ App.SnakeGame = (function () {
     },
 
     //======================================================================
-    // @brief 보드 사이즈 지정 함수. 상단에 선언한 변수에 담긴 값으로 보드 사이즈를 세팅한다.
+    // @brief 보드 사이즈 지정 함수
+    // @param 상단에 선언한 변수 boardSize에 담긴 값으로 보드 사이즈를 세팅한다.
     //======================================================================
     setBoardSize: function (boardSize) {
       boardSize = `repeat(${boardSize},1fr)`
@@ -61,7 +62,8 @@ App.SnakeGame = (function () {
     },
 
     //======================================================================
-    // @brief 게임 시작 함수. 게임 진행으로 변경된 값 초기화 진행. **게임 진행 main 함수가 포함**되어 있음.
+    // @brief 게임 시작 함수. 게임 진행으로 변경된 값 초기화 진행.
+    // @param gameBoard 엘리먼트를 파라미터로 받아 snakeElement를 동적으로 추가한다.
     //======================================================================
     drawStage: function (gameBoard) {
       self = this
@@ -80,85 +82,87 @@ App.SnakeGame = (function () {
           snakeElement.classList.add('snake')
           gameBoard.appendChild(snakeElement)
         })
-        timer = setInterval(onSnake, snakeSpeed)
+        timer = setInterval(self.onSnake, snakeSpeed)
         isGameOver = false
       }
+    },
 
-      // main snake function
-      function onSnake() {
-        // 하단 forEach 함수에서 snake를 다시 그려주기 위해 기존 snake 블럭 삭제
-        let snakes = document.querySelectorAll('.snake')
-        if (snakes) {
-          snakes.forEach(snake => snake.parentNode.removeChild(snake))
-        }
+    //======================================================================
+    // @brief 스네이크 메인 동작 함수
+    //======================================================================
+    onSnake: function () {
+      // 하단 forEach 함수에서 snake를 다시 그려주기 위해 기존 snake 블럭 삭제
+      let snakes = document.querySelectorAll('.snake')
+      if (snakes) {
+        snakes.forEach(snake => snake.parentNode.removeChild(snake))
+      }
 
-        // 방향 값에 따른 포지션 변경
-        let nextPos = { x: snakeBody[0].x, y: snakeBody[0].y }
+      // 방향 값에 따른 포지션 변경
+      let nextPos = { x: snakeBody[0].x, y: snakeBody[0].y }
 
-        if (direction == 'right') {
-          // right
-          nextPos.x = nextPos.x + 1
-        } else if (direction == 'top') {
-          // top
-          nextPos.y = nextPos.y - 1
-        } else if (direction == 'left') {
-          // left
-          nextPos.x = nextPos.x - 1
-        } else if (direction == 'bottom') {
-          // bottom
-          nextPos.y = nextPos.y + 1
-        }
+      if (direction == 'right') {
+        // right
+        nextPos.x = nextPos.x + 1
+      } else if (direction == 'top') {
+        // top
+        nextPos.y = nextPos.y - 1
+      } else if (direction == 'left') {
+        // left
+        nextPos.x = nextPos.x - 1
+      } else if (direction == 'bottom') {
+        // bottom
+        nextPos.y = nextPos.y + 1
+      }
 
-        // 벽에 부딪힐 경우 game over
-        if (
-          nextPos.x > boardSize ||
-          nextPos.y < 1 ||
-          nextPos.x < 1 ||
-          nextPos.y > boardSize
-        ) {
-          self.gameOver()
-          return false
-        }
+      // 벽에 부딪힐 경우 game over
+      if (
+        nextPos.x > boardSize ||
+        nextPos.y < 1 ||
+        nextPos.x < 1 ||
+        nextPos.y > boardSize
+      ) {
+        self.gameOver()
+        return false
+      }
 
-        // 몸통에 부딪힐 경우 game over
-        if (
-          snakeBody.some(segment => {
-            if (equalPositions(segment, nextPos)) {
-              return true
-            }
-          })
-        ) {
-          self.gameOver()
-          return false
-        }
-        function equalPositions(pos1, pos2) {
-          return pos1.x === pos2.x && pos1.y === pos2.y
-        }
-
-        snakeBody.unshift(nextPos) // next position에 새로운 블럭 추가
-        let tail = snakeBody.pop() // 이동한 만큼 꼬리 블럭 삭제 (사과를 먹을 경우 다시 추가하기 위해 변수에 할당)
-
-        // 뱀이 사과를 먹었을 경우
-        if (nextPos.x == applePos.x && nextPos.y == applePos.y) {
-          self.incrementScore()
-          snakeSpeed = snakeSpeed * 0.95
-          clearInterval(timer)
-          timer = setInterval(onSnake, snakeSpeed)
-          yummySound.currentTime = 0 // media의 play 위치 reset
-          yummySound.play()
-          snakeBody.push(tail) // pop으로 삭제했던 꼬리 블럭 다시 추가
-          self.initApple()
-        }
-
-        // snakeBody에 담긴 배열대로 전체 snake 블럭 다시 그리기
-        snakeBody.forEach(segment => {
-          snakeElement = document.createElement('div')
-          snakeElement.style.gridRowStart = segment.y
-          snakeElement.style.gridColumnStart = segment.x
-          snakeElement.classList.add('snake')
-          gameBoard.appendChild(snakeElement)
+      // 몸통에 부딪힐 경우 game over
+      if (
+        snakeBody.some(segment => {
+          if (equalPositions(segment, nextPos)) {
+            return true
+          }
         })
-      } // end of main snake function
+      ) {
+        self.gameOver()
+        return false
+      }
+      function equalPositions(pos1, pos2) {
+        return pos1.x === pos2.x && pos1.y === pos2.y
+      }
+
+      snakeBody.unshift(nextPos) // next position에 새로운 블럭 추가
+      let tail = snakeBody.pop() // 이동한 만큼 꼬리 블럭 삭제 (사과를 먹을 경우 다시 추가하기 위해 변수에 할당)
+
+      // 뱀이 사과를 먹었을 경우
+      if (nextPos.x == applePos.x && nextPos.y == applePos.y) {
+        self.incrementScore()
+        snakeSpeed = snakeSpeed * 0.95
+        clearInterval(timer)
+        timer = setInterval(self.onSnake, snakeSpeed)
+        yummySound.currentTime = 0 // media의 play 위치 reset
+        yummySound.play()
+        snakeBody.push(tail) // pop으로 삭제했던 꼬리 블럭 다시 추가
+        self.initApple()
+      }
+
+      // snakeBody에 담긴 배열대로 전체 snake 블럭 다시 그리기
+      snakeBody.forEach(segment => {
+        snakeElement = document.createElement('div')
+        snakeElement.style.gridRowStart = segment.y
+        snakeElement.style.gridColumnStart = segment.x
+        snakeElement.classList.add('snake')
+        gameBoard.appendChild(snakeElement)
+      })
     },
 
     //======================================================================
@@ -170,7 +174,7 @@ App.SnakeGame = (function () {
     },
 
     //======================================================================
-    // @brief 맥스 스코어 세팅 함수
+    // @brief 맥스 스코어 초기 세팅 함수.
     //======================================================================
     setMaxScore: function () {
       if (maxScore != null)
