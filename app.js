@@ -1,7 +1,10 @@
 var App = new Object()
 
 //======================================================================
-// Vanilla JS Snake Game
+// @brief Vanilla JS Snake Game
+// @author newstar
+// @date 2022-06-17
+// @version 1.1
 //======================================================================
 App.SnakeGame = (function () {
   let self
@@ -33,6 +36,9 @@ App.SnakeGame = (function () {
   let isGameOver = true
 
   return {
+    //======================================================================
+    // @brief 스네이크 게임 초기 함수. 게임보드 세팅, 점수 세팅, 버튼 이벤트 부여 등이 포함되어 있음.
+    //======================================================================
     init: function () {
       self = this
 
@@ -44,6 +50,7 @@ App.SnakeGame = (function () {
         gameBoard.style.gridTemplateColumns = boardSize
       }
 
+      // set max score
       setMaxScore()
       function setMaxScore() {
         if (maxScore != null)
@@ -56,6 +63,10 @@ App.SnakeGame = (function () {
         self.drawStage(gameBoard)
       })
     },
+
+    //======================================================================
+    // @brief 게임 시작 함수. 게임 진행으로 변경된 값 초기화 진행. **게임 진행 main 함수가 포함**되어 있음.
+    //======================================================================
     drawStage: function (gameBoard) {
       self = this
 
@@ -73,18 +84,19 @@ App.SnakeGame = (function () {
           snakeElement.classList.add('snake')
           gameBoard.appendChild(snakeElement)
         })
-        timer = setInterval(interval, snakeSpeed)
+        timer = setInterval(onSnake, snakeSpeed)
         isGameOver = false
       }
 
       // main snake function
-      function interval() {
+      function onSnake() {
         // 하단 forEach 함수에서 snake를 다시 그려주기 위해 기존 snake 블럭 삭제
         let snakes = document.querySelectorAll('.snake')
         if (snakes) {
           snakes.forEach(snake => snake.parentNode.removeChild(snake))
         }
 
+        // 방향 값에 따른 포지션 변경
         let nextPos = { x: snakeBody[0].x, y: snakeBody[0].y }
 
         if (direction == 'right') {
@@ -123,7 +135,6 @@ App.SnakeGame = (function () {
           self.gameOver()
           return false
         }
-
         function equalPositions(pos1, pos2) {
           return pos1.x === pos2.x && pos1.y === pos2.y
         }
@@ -131,12 +142,12 @@ App.SnakeGame = (function () {
         snakeBody.unshift(nextPos) // next position에 새로운 블럭 추가
         let tail = snakeBody.pop() // 이동한 만큼 꼬리 블럭 삭제 (사과를 먹을 경우 다시 추가하기 위해 변수에 할당)
 
-        // if snake eat apple
+        // 뱀이 사과를 먹었을 경우
         if (nextPos.x == applePos.x && nextPos.y == applePos.y) {
           self.incrementScore()
           snakeSpeed = snakeSpeed * 0.95
           clearInterval(timer)
-          timer = setInterval(interval, snakeSpeed)
+          timer = setInterval(onSnake, snakeSpeed)
           yummySound.currentTime = 0 // media의 play 위치 reset
           yummySound.play()
           snakeBody.push(tail) // pop으로 삭제했던 꼬리 블럭 다시 추가
@@ -153,27 +164,44 @@ App.SnakeGame = (function () {
         })
       } // end of main snake function
     },
+
+    //======================================================================
+    // @brief 점수 증가 함수
+    //======================================================================
     incrementScore: function () {
       score++
       scoreBox.innerText = score.toString().padStart(2, '0')
     },
+
+    //======================================================================
+    // @brief 게임 오버 함수. 게임 오버 시 초기화 되어야 하는 부분을 관리. 게임 오버 레이어 노출
+    //======================================================================
     gameOver: function () {
       isGameOver = true
       snakeSpeed = 200
+
       maxScore ? null : (maxScore = score)
       score > maxScore ? (maxScore = score) : null
       window.localStorage.setItem('maxScore', maxScore)
       maxScoreBox.innerText = maxScore.toString().padStart(2, '0')
+
       gameoverSound.currentTime = 0 // media의 play 위치 reset
       gameoverSound.play()
       gameOverLayer.classList.remove('hide')
+
       clearInterval(timer)
+
       let snakes = document.querySelectorAll('.snake')
       let apple = document.querySelector('.apple')
       snakes.forEach(snake => snake.parentNode.removeChild(snake))
       apple.remove()
+
       direction = 'right'
     },
+
+    //======================================================================
+    // @brief 사과 위치 세팅 함수. 뱀과 기존 사과의 좌표와 겹치지 않도록 세팅하는 것이 핵심.
+    //======================================================================
     initApple: function () {
       let apple = document.querySelector('.apple')
       let appleIndex, appleIndexX, appleIndexY
@@ -195,6 +223,10 @@ App.SnakeGame = (function () {
       appleElement.classList.add('apple')
       gameBoard.appendChild(appleElement)
     },
+
+    //======================================================================
+    // @brief 방향 컨트롤 관련 함수. PC에서는 방향키를 누를 경우, 모바일에서는 화면을 스와이프 할 경우 방향 변수를 변경하도록 한다.
+    //======================================================================
     controlDirection: function () {
       // control direction
       function control(e) {
