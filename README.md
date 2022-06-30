@@ -2,6 +2,8 @@
 
 Vanilla JS로 스네이크 게임 구현하기
 
+![snake](https://user-images.githubusercontent.com/33821863/176590886-6b202da0-f103-47d0-b19a-1daf102d5433.gif)
+
 ## 일정
 
 - 시작일 : 4/8 (금)
