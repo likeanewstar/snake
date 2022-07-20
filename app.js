@@ -1,24 +1,35 @@
-var App = new Object()
-
 //======================================================================
 // @brief Vanilla JS Snake Game
 // @author newstar
 // @date 2022-06-17
 // @version 1.1
 //======================================================================
+
+window.addEventListener('DOMContentLoaded', () => {
+  //======================================================================
+  // 실행문
+  //======================================================================
+  App.SnakeGame.init({
+    startBtnEl: '.start',
+    gameBoardEl: '#game-board',
+    gameOverLayer: '.gameover-layer',
+    boardSize: 17,
+    scoreBoxEl: '#score',
+    maxScoreBoxEl: '#maxScore',
+    snakeSpeed: 200,
+    startDirection: 'right', // 시작 시 진행 방향 // 'right' or 'bottom'
+    yummySoundEl: '.sounds.yum',
+    gameOverSoundEl: '.sounds.gameover',
+  })
+});
+
+var App = App || {}
+
+//======================================================================
+// @brief SnakeGame 함수
+//======================================================================
 App.SnakeGame = (function () {
   let self
-
-  const startBtn = document.querySelector('.start')
-  const gameBoard = document.getElementById('game-board')
-  const boardSize = 17
-
-  const gameOverLayer = document.querySelector('.gameover-layer')
-
-  const scoreBox = document.querySelector('#score')
-  const maxScoreBox = document.querySelector('#maxScore')
-  let score = 00,
-    maxScore = window.localStorage.getItem('maxScore') || undefined
 
   let snakeElement = document.createElement('div')
   let appleElement = document.createElement('div')
@@ -26,21 +37,43 @@ App.SnakeGame = (function () {
   let snakeBody = [{ x: 1, y: 1 }]
   let applePos = { x: 0, y: 0 }
 
-  let timer
-  let snakeSpeed = 200
-  let direction = 'right' // 시작 시 진행 방향
+  let score = 00,
+      maxScore = window.localStorage.getItem('maxScore') || undefined
 
-  const yummySound = document.querySelector('.sounds.yum')
-  const gameoverSound = document.querySelector('.sounds.gameover')
+  let timer
 
   let isGameOver = true
+
+  //======================================================================
+  // @brief 변수 할당 함수.
+  // @param 사용자가 지정할 el, option 값 등을 인자로 받음
+  // @details 객체 내부 함수에서 변수 값에 접근할 수 있도록 하기 위하여 사용
+  //======================================================================
+  const initVar = (opt) => {
+    startBtn = document.querySelector(opt.startBtnEl)
+    gameBoard = document.querySelector(opt.gameBoardEl)
+    boardSize = opt.boardSize
+
+    gameOverLayer = document.querySelector(opt.gameOverLayer)
+
+    scoreBox = document.querySelector(opt.scoreBoxEl)
+    maxScoreBox = document.querySelector(opt.maxScoreBoxEl)
+
+    snakeSpeed = opt.snakeSpeed
+    direction = opt.startDirection;
+
+    yummySound = document.querySelector(opt.yummySoundEl)
+    gameoverSound = document.querySelector(opt.gameOverSoundEl)
+  }
 
   return {
     //======================================================================
     // @brief 스네이크 게임 초기 함수. 게임보드 세팅, 점수 세팅, 버튼 이벤트 부여 등이 포함되어 있음.
     //======================================================================
-    init: function () {
+    init: function (opt) {
       self = this
+
+      initVar(opt)
 
       self.setBoardSize(boardSize)
       self.controlDirection()
@@ -293,9 +326,4 @@ App.SnakeGame = (function () {
       gameBoard.addEventListener('touchend', handleMobileTouchEnd)
     },
   }
-})()
-
-//======================================================================
-// 실행문
-//======================================================================
-App.SnakeGame.init()
+})();
