@@ -66,8 +66,6 @@ App.SnakeGame = (function () {
     // @param gameBoard 엘리먼트를 파라미터로 받아 snakeElement를 동적으로 추가한다.
     //======================================================================
     drawStage: function (gameBoard) {
-      self = this
-
       if (isGameOver == true) {
         gameOverLayer.classList.add('hide')
 
