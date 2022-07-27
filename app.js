@@ -1,9 +1,13 @@
+'use strict';
+
 //======================================================================
 // @brief Vanilla JS Snake Game
 // @author newstar
-// @date 2022-06-17
-// @version 1.1
+// @date 2022-07-27
+// @version 1.2
 //======================================================================
+
+var App = App || {}
 
 window.addEventListener('DOMContentLoaded', () => {
   //======================================================================
@@ -23,13 +27,26 @@ window.addEventListener('DOMContentLoaded', () => {
   })
 });
 
-var App = App || {}
-
 //======================================================================
 // @brief SnakeGame 함수
 //======================================================================
 App.SnakeGame = (function () {
   let self
+
+  let startBtn
+  let gameBoard 
+  let boardSize 
+  
+  let gameOverLayer
+
+  let scoreBox
+  let maxScoreBox
+
+  let snakeSpeed
+  let direction 
+
+  let yummySound
+  let gameoverSound
 
   let snakeElement = document.createElement('div')
   let appleElement = document.createElement('div')
@@ -37,8 +54,8 @@ App.SnakeGame = (function () {
   let snakeBody = [{ x: 1, y: 1 }]
   let applePos = { x: 0, y: 0 }
 
-  let score = 00,
-      maxScore = window.localStorage.getItem('maxScore') || undefined
+  let score = 0
+  let maxScore = window.localStorage.getItem('maxScore') || undefined
 
   let timer
 
@@ -53,14 +70,14 @@ App.SnakeGame = (function () {
     startBtn = document.querySelector(opt.startBtnEl)
     gameBoard = document.querySelector(opt.gameBoardEl)
     boardSize = opt.boardSize
-
+  
     gameOverLayer = document.querySelector(opt.gameOverLayer)
 
     scoreBox = document.querySelector(opt.scoreBoxEl)
     maxScoreBox = document.querySelector(opt.maxScoreBoxEl)
 
     snakeSpeed = opt.snakeSpeed
-    direction = opt.startDirection;
+    direction = opt.startDirection
 
     yummySound = document.querySelector(opt.yummySoundEl)
     gameoverSound = document.querySelector(opt.gameOverSoundEl)
@@ -326,4 +343,4 @@ App.SnakeGame = (function () {
       gameBoard.addEventListener('touchend', handleMobileTouchEnd)
     },
   }
-})();
+})()
